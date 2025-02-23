@@ -6,10 +6,10 @@ import (
 )
 
 func main() {
-
+	loading()
 }
 
-func init() {
+func loading() {
 	config.InitConfig()
 	startup.InitMySQL()
 }

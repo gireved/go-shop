@@ -1,0 +1,21 @@
+mysql:
+  default:
+    # 基础配置
+    dialect: "mysql"
+    dbHost: "10.22.130.17"
+    dbPort: "3306"
+    dbName: "shop"
+    userName: "root"
+    password: "eaip123456!"
+    charset: "utf8mb4"
+
+    # 连接池配置
+    maxOpenConns: 100       # 最大打开连接数（推荐值：2 * CPU核心数）
+    maxIdleConns: 20        # 最大空闲连接数（推荐值：同maxOpenConns的1/5）
+    connMaxLifetime: "30m"  # 连接最大存活时间（推荐值：5-30分钟）
+    connMaxIdleTime: "10m"  # 连接最大空闲时间（推荐值：5-15分钟）
+
+    # 读写分离配置
+    writeDSN: "app_user:your_secure_password@tcp(primary.db.com:3306)/your_database?charset=utf8mb4&parseTime=true"
+    readReplica1: "app_user:your_secure_password@tcp(replica1.db.com:3306)/your_database?charset=utf8mb4&parseTime=true"
+    readReplica2: "app_user:your_secure_password@tcp(replica2.db.com:3306)/your_database?charset=utf8mb4&parseTime=true"

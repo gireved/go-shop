@@ -19,7 +19,7 @@ type Mysql struct {
 	Charset  string `yaml:"charset"`
 
 	// 连接池配置
-	MaxOpenConns    int           `yaml:"maxOpenConns"`    // 最大打开连接数
+	MaxOpenConns2   int           `yaml:"maxOpenConns"`    // 最大打开连接数
 	MaxIdleConns    int           `yaml:"maxIdleConns"`    // 最大空闲连接数
 	ConnMaxLifetime time.Duration `yaml:"connMaxLifetime"` // 连接最大存活时间
 	ConnMaxIdleTime time.Duration `yaml:"connMaxIdleTime"` // 连接最大空闲时间

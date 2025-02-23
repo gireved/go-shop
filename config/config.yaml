@@ -16,6 +16,6 @@ mysql:
     connMaxIdleTime: "10m"  # 连接最大空闲时间（推荐值：5-15分钟）
 
     # 读写分离配置
-    writeDSN: "app_user:your_secure_password@tcp(primary.db.com:3306)/your_database?charset=utf8mb4&parseTime=true"
+    writeDSN: "app1_user:your_secure_password@tcp(primary.db.com:3306)/your_database?charset=utf8mb4&parseTime=true"
     readReplica1: "app_user:your_secure_password@tcp(replica1.db.com:3306)/your_database?charset=utf8mb4&parseTime=true"
     readReplica2: "app_user:your_secure_password@tcp(replica2.db.com:3306)/your_database?charset=utf8mb4&parseTime=true"

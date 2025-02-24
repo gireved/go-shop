@@ -40,7 +40,7 @@ func InitConfig() {
 	workDir, _ := os.Getwd()
 	viper.SetConfigName("config")
 	viper.SetConfigType("yaml")
-	// viper.AddConfigPath(workDir + "/config/locales")
+	viper.AddConfigPath(workDir + "/config")
 	viper.AddConfigPath(workDir)
 	err := viper.ReadInConfig()
 	if err != nil {

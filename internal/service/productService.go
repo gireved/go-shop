@@ -2,14 +2,17 @@ package service
 
 import (
 	"context"
+	"github.com/google/uuid"
 	"go-shop/internal/model"
 	"go-shop/internal/repository/dao"
+	"go-shop/internal/types"
 	"go-shop/pkg/logger"
+	"time"
 )
 
 type ProductService interface {
 	GetProductByName(ctx context.Context, name string) (*[]model.Product, error)
-	CreateProduct(ctx context.Context, product *model.Product) error
+	CreateProduct(ctx context.Context, product *types.ProductCreateReq) error
 	UpdateProduct(ctx context.Context, product *model.Product) error
 	DeleteProduct(ctx context.Context, uuid string) error
 	ListAllProducts(ctx context.Context) (*[]model.Product, error)
@@ -28,9 +31,9 @@ func (s *productService) GetProductByName(ctx context.Context, name string) (*[]
 	}
 	return products, err
 }
-func (s *productService) CreateProduct(ctx context.Context, product *model.Product) error {
+func (s *productService) CreateProduct(ctx context.Context, req *types.ProductCreateReq) error {
 
-	err := s.productDao.CreateProduct(ctx, product)
+	err := s.productDao.CreateProduct(ctx, reqToProduct(req))
 	if err != nil {
 		logger.Error("新增商品出错" + err.Error())
 		return err
@@ -61,4 +64,20 @@ func (s *productService) ListAllProducts(ctx context.Context) (*[]model.Product,
 		return nil, err
 	}
 	return products, err
+}
+
+func reqToProduct(req *types.ProductCreateReq) *model.Product {
+	uid := uuid.New().String()
+	return &model.Product{
+		Name:             req.Name,
+		Uuid:             uid,
+		Description:      req.Description,
+		Number:           req.Number,
+		OriginalPrice:    req.OriginalPrice,
+		PromotionalPrice: req.PromotionPrice,
+		Owner:            req.Owner,
+		Category:         req.Category,
+		Status:           req.Status,
+		CreatedAt:        time.Now(),
+	}
 }

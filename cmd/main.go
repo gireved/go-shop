@@ -8,6 +8,8 @@ import (
 
 func main() {
 	loading()
+
+	//r := routers.NewProductRouter()
 }
 
 func loading() {

@@ -17,7 +17,7 @@ func InitializeProductRouter() *gin.Engine {
 		startup.GetDB,
 		dao.NewProductDao,
 		service.NewProductService,
-		routers.NewProductRouter,
+		routers.NewRouter,
 	)
 	return nil
 }

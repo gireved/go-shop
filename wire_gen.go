@@ -21,6 +21,6 @@ func InitializeProductRouter() *gin.Engine {
 	db := startup.GetDB()
 	productDao := dao.NewProductDao(db)
 	productService := service.NewProductService(productDao)
-	engine := routers.NewProductRouter(productService)
+	engine := routers.NewRouter(productService)
 	return engine
 }

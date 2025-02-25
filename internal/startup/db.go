@@ -5,6 +5,8 @@ import (
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
 	conf "go-shop/config"
+	"go-shop/internal/models"
+	zaplogger "go-shop/pkg/logger"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -54,6 +56,12 @@ func InitMySQL() error {
 		// 5. 配置连接池
 		if err := configureConnectionPool(primaryDB, mConfig); err != nil {
 			initErr = fmt.Errorf("配置连接池失败: %w", err)
+			return
+		}
+
+		// **6. 进行自动迁移**
+		if err := autoMigrateTables(primaryDB); err != nil {
+			initErr = fmt.Errorf("数据库迁移失败: %w", err)
 			return
 		}
 
@@ -189,6 +197,22 @@ func newCustomLogger() logger.Interface {
 			ParameterizedQueries:      true,
 		},
 	)
+}
+
+// 自动迁移数据库表
+func autoMigrateTables(db *gorm.DB) error {
+	zaplogger.Info("开始数据库表迁移...")
+
+	err := db.AutoMigrate(
+		&models.Product{}, // 商品表
+	)
+
+	if err != nil {
+		return err
+	}
+
+	zaplogger.Info("数据库表迁移完成")
+	return nil
 }
 
 //  连接池健康监控

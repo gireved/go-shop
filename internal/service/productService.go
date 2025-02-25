@@ -3,7 +3,7 @@ package service
 import (
 	"context"
 	"github.com/google/uuid"
-	"go-shop/internal/model"
+	"go-shop/internal/models"
 	"go-shop/internal/repository/dao"
 	"go-shop/internal/types"
 	"go-shop/pkg/logger"
@@ -11,11 +11,11 @@ import (
 )
 
 type ProductService interface {
-	GetProductByName(ctx context.Context, name string) (*[]model.Product, error)
+	GetProductByName(ctx context.Context, name string) (*[]models.Product, error)
 	CreateProduct(ctx context.Context, product *types.ProductCreateReq) error
-	UpdateProduct(ctx context.Context, product *model.Product) error
+	UpdateProduct(ctx context.Context, product *models.Product) error
 	DeleteProduct(ctx context.Context, uuid string) error
-	ListAllProducts(ctx context.Context) (*[]model.Product, error)
+	ListAllProducts(ctx context.Context) (*[]models.Product, error)
 }
 type productService struct {
 	productDao dao.ProductDao
@@ -24,7 +24,7 @@ type productService struct {
 func NewProductService(productDao dao.ProductDao) ProductService {
 	return &productService{productDao: productDao}
 }
-func (s *productService) GetProductByName(ctx context.Context, name string) (*[]model.Product, error) {
+func (s *productService) GetProductByName(ctx context.Context, name string) (*[]models.Product, error) {
 	products, err := s.productDao.GetProductsByName(ctx, name)
 	if err != nil {
 		logger.Error("根据名称获取商品失败" + err.Error())
@@ -40,7 +40,7 @@ func (s *productService) CreateProduct(ctx context.Context, req *types.ProductCr
 	}
 	return err
 }
-func (s *productService) UpdateProduct(ctx context.Context, product *model.Product) error {
+func (s *productService) UpdateProduct(ctx context.Context, product *models.Product) error {
 	err := s.productDao.UpdateProduct(ctx, product)
 	if err != nil {
 		logger.Error("更新商品时出错" + err.Error())
@@ -57,7 +57,7 @@ func (s *productService) DeleteProduct(ctx context.Context, uuid string) error {
 	return err
 
 }
-func (s *productService) ListAllProducts(ctx context.Context) (*[]model.Product, error) {
+func (s *productService) ListAllProducts(ctx context.Context) (*[]models.Product, error) {
 	products, err := s.productDao.GetAllProducts(ctx)
 	if err != nil {
 		logger.Error("展示所有商品出错" + err.Error())
@@ -66,9 +66,9 @@ func (s *productService) ListAllProducts(ctx context.Context) (*[]model.Product,
 	return products, err
 }
 
-func reqToProduct(req *types.ProductCreateReq) *model.Product {
+func reqToProduct(req *types.ProductCreateReq) *models.Product {
 	uid := uuid.New().String()
-	return &model.Product{
+	return &models.Product{
 		Name:             req.Name,
 		Uuid:             uid,
 		Description:      req.Description,

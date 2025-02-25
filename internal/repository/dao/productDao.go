@@ -2,16 +2,16 @@ package dao
 
 import (
 	"context"
-	"go-shop/internal/model"
+	"go-shop/internal/models"
 	"go-shop/pkg/logger"
 	"gorm.io/gorm"
 )
 
 type ProductDao interface {
-	CreateProduct(ctx context.Context, product *model.Product) error
-	GetProductsByName(ctx context.Context, name string) (*[]model.Product, error)
-	GetAllProducts(ctx context.Context) (*[]model.Product, error)
-	UpdateProduct(ctx context.Context, product *model.Product) error
+	CreateProduct(ctx context.Context, product *models.Product) error
+	GetProductsByName(ctx context.Context, name string) (*[]models.Product, error)
+	GetAllProducts(ctx context.Context) (*[]models.Product, error)
+	UpdateProduct(ctx context.Context, product *models.Product) error
 	DeleteProduct(ctx context.Context, Uuid string) error
 }
 
@@ -23,12 +23,12 @@ func NewProductDao(db *gorm.DB) ProductDao {
 	return &productDao{DB: db}
 }
 
-func (p *productDao) CreateProduct(ctx context.Context, product *model.Product) error {
+func (p *productDao) CreateProduct(ctx context.Context, product *models.Product) error {
 	return p.DB.Create(product).Error
 }
 
-func (p *productDao) GetProductsByName(ctx context.Context, name string) (*[]model.Product, error) {
-	var products []model.Product
+func (p *productDao) GetProductsByName(ctx context.Context, name string) (*[]models.Product, error) {
+	var products []models.Product
 	/*
 		这个 result 包含了查询的执行状态，包括：
 		查询是否成功。
@@ -45,8 +45,8 @@ func (p *productDao) GetProductsByName(ctx context.Context, name string) (*[]mod
 	return &products, nil
 }
 
-func (p *productDao) GetAllProducts(ctx context.Context) (*[]model.Product, error) {
-	var products []model.Product
+func (p *productDao) GetAllProducts(ctx context.Context) (*[]models.Product, error) {
+	var products []models.Product
 	result := p.DB.Find(&products)
 	if result.Error != nil {
 		return nil, result.Error
@@ -57,10 +57,10 @@ func (p *productDao) GetAllProducts(ctx context.Context) (*[]model.Product, erro
 	return &products, result.Error
 }
 
-func (p *productDao) UpdateProduct(ctx context.Context, product *model.Product) error {
+func (p *productDao) UpdateProduct(ctx context.Context, product *models.Product) error {
 	return p.DB.Save(product).Error
 }
 
 func (p *productDao) DeleteProduct(ctx context.Context, Uuid string) error {
-	return p.DB.Delete(&model.Product{}, Uuid).Error
+	return p.DB.Delete(&models.Product{}, Uuid).Error
 }

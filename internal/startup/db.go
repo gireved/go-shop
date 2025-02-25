@@ -3,6 +3,7 @@ package startup
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
+	_ "github.com/go-sql-driver/mysql"
 	conf "go-shop/config"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -113,7 +114,9 @@ func createGormDB(dsn string, c *conf.Mysql) (*gorm.DB, error) {
 		Logger: newCustomLogger(),
 		// 命名策略：使用单数表名
 		// 例如：User模型对应的表名为"user"而非默认的"users"
-		NamingStrategy:         schema.NamingStrategy{SingularTable: true, NoLowerCase: false},
+		NamingStrategy: schema.NamingStrategy{
+			SingularTable: true,
+		},
 		SkipDefaultTransaction: true, // 禁用默认事务提升性能
 		PrepareStmt:            true, // 开启预变编译
 		NowFunc: func() time.Time {
@@ -123,13 +126,14 @@ func createGormDB(dsn string, c *conf.Mysql) (*gorm.DB, error) {
 	}
 
 	return gorm.Open(mysql.New(mysql.Config{
-		DriverName:                "mysql8", // 明确指定使用8.x驱动
-		DefaultStringSize:         191,      // 适配utf8mb4最大索引长度
-		DisableDatetimePrecision:  false,    // 启用datetime精度
-		DontSupportRenameIndex:    false,    // 支持在线DDL
-		DontSupportRenameColumn:   false,    // 支持列重命名
-		SkipInitializeWithVersion: true,     // 禁用版本自动检测
-		Conn:                      nil,      // 可自定义底层连接
+		DSN:                       dsn,
+		DriverName:                "mysql", // 明确指定使用8.x驱动
+		DefaultStringSize:         191,     // 适配utf8mb4最大索引长度
+		DisableDatetimePrecision:  false,   // 启用datetime精度
+		DontSupportRenameIndex:    false,   // 支持在线DDL
+		DontSupportRenameColumn:   false,   // 支持列重命名
+		SkipInitializeWithVersion: true,    // 禁用版本自动检测
+		Conn:                      nil,     // 可自定义底层连接
 	}), gormConfig)
 }
 

@@ -9,10 +9,10 @@ import (
 func NewProductRouter(svc service.ProductService) *gin.Engine {
 	router := gin.Default()
 	productHandler := api.NewProductHandler(svc)
-	router.Group("/product")
+	productGroup := router.Group("/product")
 	{
 		//router.GET("/:id", GetProduct)
-		router.POST("/", productHandler.CreateProductHandler())
+		productGroup.POST("/", productHandler.CreateProductHandler())
 		//router.PUT("/:id", UpdateProduct)
 		//router.DELETE("/:id", DeleteProduct)
 	}

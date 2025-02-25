@@ -2,14 +2,21 @@ package main
 
 import (
 	"go-shop/config"
+	"go-shop/internal/repository/dao"
+	"go-shop/internal/routers"
+	"go-shop/internal/service"
 	"go-shop/internal/startup"
 	"go-shop/pkg/logger"
 )
 
 func main() {
 	loading()
+	db := startup.GetDB()
+	productDao := dao.NewProductDao(db)
+	productService := service.NewProductService(productDao)
+	r := routers.NewProductRouter(productService)
 
-	//r := routers.NewProductRouter()
+	r.Run()
 }
 
 func loading() {

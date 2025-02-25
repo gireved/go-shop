@@ -4,9 +4,9 @@ mysql:
     dialect: "mysql"
     dbHost: "10.22.130.17"
     dbPort: "3306"
-    dbName: "shop"
+    dbName: "go_shop"
     userName: "root"
-    password: "eaip123456!"
+    password: "123456"
     charset: "utf8mb4"
 
     # 连接池配置

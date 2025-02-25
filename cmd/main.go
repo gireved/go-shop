@@ -1,22 +1,22 @@
 package main
 
 import (
+	go_shop "go-shop"
 	"go-shop/config"
-	"go-shop/internal/repository/dao"
-	"go-shop/internal/routers"
-	"go-shop/internal/service"
 	"go-shop/internal/startup"
 	"go-shop/pkg/logger"
+	"log"
 )
 
 func main() {
 	loading()
-	db := startup.GetDB()
-	productDao := dao.NewProductDao(db)
-	productService := service.NewProductService(productDao)
-	r := routers.NewProductRouter(productService)
+	// 使用 Wire 生成的注入器函数初始化路由器
+	router := go_shop.InitializeProductRouter()
+	// 启动服务器
+	if err := router.Run(); err != nil {
+		log.Fatalf("服务器启动失败: %v", err)
+	}
 
-	r.Run()
 }
 
 func loading() {

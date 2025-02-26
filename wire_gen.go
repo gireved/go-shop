@@ -9,18 +9,19 @@ package go_shop
 import (
 	"github.com/gin-gonic/gin"
 	"go-shop/internal/repository/dao"
-	"go-shop/internal/routers"
 	"go-shop/internal/service"
 	"go-shop/internal/startup"
+	startup2 "go-shop/pkg/ginx"
 )
 
 // Injectors from wire.go:
 
-// 初始化依赖注入
+// InitializeProductRouter 初始化 Product 相关的 Gin 路由
 func InitializeProductRouter() *gin.Engine {
+	v := startup.InitGinMiddlewares()
 	db := startup.GetDB()
 	productDao := dao.NewProductDao(db)
 	productService := service.NewProductService(productDao)
-	engine := routers.NewRouter(productService)
+	engine := startup2.NewGinEngine(v, productService)
 	return engine
 }

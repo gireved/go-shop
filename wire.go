@@ -6,18 +6,19 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/google/wire"
 	"go-shop/internal/repository/dao"
-	"go-shop/internal/routers"
 	"go-shop/internal/service"
 	"go-shop/internal/startup"
+	g "go-shop/pkg/ginx"
 )
 
-// 初始化依赖注入
+// InitializeProductRouter 初始化 Product 相关的 Gin 路由
 func InitializeProductRouter() *gin.Engine {
 	wire.Build(
-		startup.GetDB,
-		dao.NewProductDao,
-		service.NewProductService,
-		routers.NewRouter,
+		startup.GetDB,              // 获取数据库实例
+		dao.NewProductDao,          // 注入 Product Dao
+		service.NewProductService,  // 注入 Product Service
+		startup.InitGinMiddlewares, // 注入 Gin 中间件
+		g.NewGinEngine,             // 创建 Gin 引擎
 	)
 	return nil
 }

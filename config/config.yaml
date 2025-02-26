@@ -19,3 +19,11 @@ mysql:
     writeDSN: "root:123456@tcp(10.22.130.17:3306)/go_shop?charset=utf8mb4&parseTime=true"
     readReplica1: "root:123456@tcp(10.22.130.17:3307)/go_shop?charset=utf8mb4&parseTime=true"
     readReplica2: "root:123456@tcp(10.22.130.17:3308)/go_shop?charset=utf8mb4&parseTime=true"
+
+prometheus:
+  enabled: true
+  port: 9091
+  path: "/metrics"
+  host: "0.0.0.0"
+
+

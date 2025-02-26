@@ -32,8 +32,16 @@ type Mysql struct {
 	//
 }
 
+type PrometheusConfig struct {
+	Enabled bool   `yaml:"enabled"`
+	Port    int    `yaml:"port"`
+	Path    string `yaml:"path"`
+	Host    string `yaml:"host"`
+}
+
 type Conf struct {
-	Mysql map[string]*Mysql `yaml:"mysql"`
+	Mysql      map[string]*Mysql `yaml:"mysql"`
+	Prometheus *PrometheusConfig `yaml:"prometheus"`
 }
 
 func InitConfig() {

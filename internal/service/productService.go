@@ -13,7 +13,7 @@ import (
 type ProductService interface {
 	GetProductByName(ctx context.Context, name string) (*[]models.Product, error)
 	CreateProduct(ctx context.Context, product *types.ProductCreateReq) error
-	UpdateProduct(ctx context.Context, product *models.Product) error
+	UpdateProduct(ctx context.Context, product *types.ProductUpdateReq) error
 	DeleteProduct(ctx context.Context, uuid string) error
 	ListAllProducts(ctx context.Context) (*[]models.Product, error)
 }
@@ -40,8 +40,36 @@ func (s *productService) CreateProduct(ctx context.Context, req *types.ProductCr
 	}
 	return err
 }
-func (s *productService) UpdateProduct(ctx context.Context, product *models.Product) error {
-	err := s.productDao.UpdateProduct(ctx, product)
+func (s *productService) UpdateProduct(ctx context.Context, req *types.ProductUpdateReq) error {
+	updates := make(map[string]interface{})
+	if req.Name != nil {
+		updates["name"] = *req.Name
+	}
+
+	if req.Number != nil {
+		updates["number"] = *req.Number
+	}
+
+	if req.Status != nil {
+		updates["status"] = *req.Status
+	}
+
+	if req.Description != nil {
+		updates["description"] = *req.Description
+	}
+	if req.Owner != nil {
+		updates["owner"] = *req.Owner
+	}
+	if req.Category != nil {
+		updates["category"] = *req.Category
+	}
+	if req.PromotionPrice != nil {
+		updates["promotionPrice"] = *req.PromotionPrice
+	}
+	if req.OriginalPrice != nil {
+		updates["originalPrice"] = *req.OriginalPrice
+	}
+	err := s.productDao.UpdateProduct(ctx, updates, req.Uuid)
 	if err != nil {
 		logger.Error("更新商品时出错" + err.Error())
 		return err

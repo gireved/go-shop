@@ -11,7 +11,7 @@ type ProductDao interface {
 	CreateProduct(ctx context.Context, product *models.Product) error
 	GetProductsByName(ctx context.Context, name string) (*[]models.Product, error)
 	GetAllProducts(ctx context.Context) (*[]models.Product, error)
-	UpdateProduct(ctx context.Context, product *models.Product) error
+	UpdateProduct(ctx context.Context, updateProduct map[string]interface{}, uuid string) error
 	DeleteProduct(ctx context.Context, Uuid string) error
 }
 
@@ -57,10 +57,11 @@ func (p *productDao) GetAllProducts(ctx context.Context) (*[]models.Product, err
 	return &products, result.Error
 }
 
-func (p *productDao) UpdateProduct(ctx context.Context, product *models.Product) error {
-	return p.DB.Save(product).Error
+func (p *productDao) UpdateProduct(ctx context.Context, updateProduct map[string]interface{}, uuid string) error {
+	//return p.DB.Model(&models.Product{}).Where("uuid = ?", product.Uuid).Updates(product).Error
+	return p.DB.Model(&models.Product{}).Where("uuid = ?", uuid).Updates(updateProduct).Error
 }
 
 func (p *productDao) DeleteProduct(ctx context.Context, Uuid string) error {
-	return p.DB.Delete(&models.Product{}, Uuid).Error
+	return p.DB.Where("uuid = ?", Uuid).Delete(&models.Product{}).Error
 }

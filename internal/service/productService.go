@@ -11,11 +11,11 @@ import (
 )
 
 type ProductService interface {
-	GetProductByName(ctx context.Context, name string) (*[]models.Product, error)
+	GetProductByName(ctx context.Context, name string, page, pageSize int) (*[]models.Product, error)
 	CreateProduct(ctx context.Context, product *types.ProductCreateReq) error
 	UpdateProduct(ctx context.Context, product *types.ProductUpdateReq) error
 	DeleteProduct(ctx context.Context, uuid string) error
-	ListAllProducts(ctx context.Context) (*[]models.Product, error)
+	ListAllProducts(ctx context.Context, page, pageSize int) ([]models.Product, error)
 }
 type productService struct {
 	productDao dao.ProductDao
@@ -24,15 +24,14 @@ type productService struct {
 func NewProductService(productDao dao.ProductDao) ProductService {
 	return &productService{productDao: productDao}
 }
-func (s *productService) GetProductByName(ctx context.Context, name string) (*[]models.Product, error) {
-	products, err := s.productDao.GetProductsByName(ctx, name)
+func (s *productService) GetProductByName(ctx context.Context, name string, page, pageSize int) (*[]models.Product, error) {
+	products, err := s.productDao.GetProductsByName(ctx, name, page, pageSize)
 	if err != nil {
 		logger.Error("根据名称获取商品失败" + err.Error())
 	}
 	return products, err
 }
 func (s *productService) CreateProduct(ctx context.Context, req *types.ProductCreateReq) error {
-
 	err := s.productDao.CreateProduct(ctx, reqToProduct(req))
 	if err != nil {
 		logger.Error("新增商品出错" + err.Error())
@@ -85,8 +84,13 @@ func (s *productService) DeleteProduct(ctx context.Context, uuid string) error {
 	return err
 
 }
-func (s *productService) ListAllProducts(ctx context.Context) (*[]models.Product, error) {
-	products, err := s.productDao.GetAllProducts(ctx)
+func (s *productService) ListAllProducts(ctx context.Context, page, pageSize int) ([]models.Product, error) {
+	var products []models.Product
+	var err error
+	products, err = s.productDao.GetAllProducts(ctx, page, pageSize)
+	if products == nil {
+		products = []models.Product{}
+	}
 	if err != nil {
 		logger.Error("展示所有商品出错" + err.Error())
 		return nil, err

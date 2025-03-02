@@ -1,6 +1,8 @@
 package types
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/gin-gonic/gin"
+)
 
 type Response struct {
 	Code    int         `json:"code"`    // 状态码
@@ -18,10 +20,10 @@ func RespSuccess(ctx *gin.Context, data interface{}) Response {
 }
 
 // 错误响应
-func ErrorResponse(ctx *gin.Context, err error) Response {
+func ErrorResponse(ctx *gin.Context, code int, message string, err error) Response {
 	return Response{
-		Code:    500, // 自定义错误码
-		Message: err.Error(),
+		Code:    code, // 自定义错误码
+		Message: message + err.Error(),
 		Data:    nil,
 	}
 }

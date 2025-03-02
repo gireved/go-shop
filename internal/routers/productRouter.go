@@ -16,5 +16,7 @@ func SetupProductRoutes(router *gin.Engine, svc service.ProductService) {
 		productGroup.POST("/", productHandler.CreateProductHandler())
 		productGroup.PUT("/", productHandler.UpdateProductHandler())
 		productGroup.DELETE("/", productHandler.DeleteProductHandler())
+		productGroup.GET("/all", productHandler.ListAllProductHandler())
+		productGroup.GET("/", productHandler.GetProductByNameHandler())
 	}
 }
